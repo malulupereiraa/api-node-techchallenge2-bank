@@ -27,10 +27,11 @@ const createTransaction = async (req, res) => {
 const getTransactions = async (req, res) => {
   const { userId } = req.params;
   try {
-    const transactions = await Transaction.find({ userId });
+    const transactions = await Transaction.find();
+    const transactionsFiltered = transactions.filter(transaction => transaction.user == userId);
     res.status(200).json({
-      total: transactions.length,
-      result: transactions,
+      total: transactionsFiltered.length,
+      result: transactionsFiltered,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
