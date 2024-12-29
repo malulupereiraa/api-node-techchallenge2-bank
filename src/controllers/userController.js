@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // Register new user
@@ -20,9 +21,16 @@ const registerUser = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
+    const usersFormatted = users.map(user => {
+      return {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+      }
+    });
     res.status(200).json({
       total: users.length,
-      result: users
+      result: usersFormatted
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -37,7 +45,12 @@ const getUsers = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'Usuário não Encontrado...' });
     }
-    res.status(200).json(user);
+    const userFormatted = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+    }
+    res.status(200).json(userFormatted);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -61,11 +74,12 @@ const getUsers = async (req, res) => {
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const { username, email, password } = req.body;
+  const passwordEncrypted = bcrypt.hash(password, 10)
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { username, email, password },
+      { username, email, passwordEncrypted },
       { new: true }
     );
     if (!updatedUser) {

@@ -7,14 +7,14 @@ const jwtAuth = require('../middleware/jwtAuth');
 
 /**
  * @swagger
- * /api/transactions/all/{userId}:
+ *  /api/users/transactions/all:
  *   get:
  *     summary: Busca Transações
  *     tags: [Transactions]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: userId
  *         required: true
  *         description: ID do Usuário
@@ -24,11 +24,11 @@ const jwtAuth = require('../middleware/jwtAuth');
  *       200:
  *         description: Lista de Transações Cadastradas
  */
-router.get('/all/:userId', getTransactions)
+router.get('/all', getTransactions)
 
 /**
  * @swagger
- * /api/transactions/{id}:
+ *  /api/users/transactions/{id}:
  *   get:
  *     summary: Obtém Transação pelo ID
  *     tags: [Transactions]
@@ -51,7 +51,7 @@ router.get('/:id', getTransactionById)
 
 /**
  * @swagger
- * /api/transactions:
+ *  /api/users/transactions:
  *   post:
  *     summary: Cria uma Nova Transação
  *     tags: [Transactions]
@@ -80,7 +80,7 @@ router.post('/', jwtAuth, createTransaction);  // Create transaction
 
 /**
  * @swagger
- * /api/transactions/{id}:
+ *  /api/users/transactions/{id}:
  *   put:
  *     summary: Atualizar os Dados da Transação
  *     tags: [Transactions]
@@ -112,11 +112,11 @@ router.post('/', jwtAuth, createTransaction);  // Create transaction
  *       201:
  *         description: Transação Atualizado com Sucesso
  */
-router.put('/:id', updateTransaction)
+router.put('/:id', jwtAuth, updateTransaction)
 
 /**
  * @swagger
- * /api/transactions/{id}:
+ *  /api/users/transactions/{id}:
  *   delete:
  *     summary: Deletar Transação
  *     tags: [Transactions]
