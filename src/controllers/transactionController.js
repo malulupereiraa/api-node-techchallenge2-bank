@@ -25,7 +25,7 @@ const createTransaction = async (req, res) => {
 
 // Get all transactions
 const getTransactions = async (req, res) => {
-  const { userId } = req.query;
+  const { userId } = req.params;
   try {
     const transactions = await Transaction.find();
     const transactionsFiltered = transactions.filter(transaction => transaction.user == userId);
